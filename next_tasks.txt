@@ -1,0 +1,6 @@
+- Restrict zombies from moving outside the window  done
+- put a aim line instead of mouse cursor - done
+- confirm a game there
+- add atmosphere
+- create a menu (must add option for aim sensitivity)
+
