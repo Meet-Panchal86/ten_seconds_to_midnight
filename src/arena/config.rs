@@ -1,0 +1,1 @@
+pub const BORDER_THICKNESS:f32 = 8.0;

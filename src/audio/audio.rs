@@ -1,6 +1,12 @@
-use bevy::{asset::AssetServer, audio::{AudioPlayer, PlaybackMode, PlaybackSettings, Volume}, ecs::system::{Commands, Res}, utils::default};
+use bevy::{asset::{AssetServer, Handle}, audio::{AudioPlayer, AudioSource, PlaybackMode, PlaybackSettings, Volume}, ecs::{resource::Resource, system::{Commands, Res}}, utils::default};
 
-use crate::asset_resources::AudioAssets;
+#[derive(Resource)]
+pub struct AudioAssets {
+    pub gunshot: Handle<AudioSource>,
+    pub zombie_attack: Handle<AudioSource>,
+    pub zombie_crunch: Handle<AudioSource>,
+    pub gamesound: Handle<AudioSource>
+}
 
 
 pub fn load_audio_assets(asset_server: Res<AssetServer>, mut commands: Commands) {

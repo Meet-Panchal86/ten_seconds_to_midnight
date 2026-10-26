@@ -1,6 +1,11 @@
-use bevy::{ecs::{entity::Entity, query::With, system::{Commands, Query, Res}}, text::TextFont, ui::{AlignItems, JustifyContent, Node, Val::{self, Px}, widget::Text}, utils::default};
+use bevy::ecs::system::{Commands, Res};
 
-use crate::{components::{GameOverText, Health, HealthText, KillText, Player, WaveText}, resources::{Kills, Wave}};
+use bevy::{ecs::{query::With, system::{Query}}, text::TextFont, ui::{Node, Val::Px, widget::Text}, utils::default};
+
+use crate::components::Health;
+use crate::player::components::Player;
+use crate::resources::{Kills, Wave};
+use crate::ui::{components::{HealthText, KillText, WaveText}};
 
 pub fn setup_kill_ui(mut commands: Commands) {
     commands.spawn((
@@ -88,42 +93,4 @@ pub fn update_health_text(
     }; 
 
     text.0 = format!("HEALTH: {} / {}", player_health.current, player_health.max);
-}
-
-pub fn gameover_text(
-    mut commands: Commands,
-    player: Query<&Health, With<Player>>,
-    gameover: Query<Entity, With<GameOverText>>
-) {
-    let Ok(health) = player.single() else {
-        return;
-    };
-
-    if health.current <= 0.0 {
-        if gameover.is_empty() {
-            commands
-            .spawn((
-                GameOverText,
-                Node {
-                width: Val::Percent(100.0),
-                height: Val::Percent(100.0),
-                align_items: AlignItems::Center,
-                justify_content: JustifyContent::Center,
-                ..default()
-            }))
-            .with_children(|parent| {
-                parent.spawn((
-                    Text::new("GAME OVER"),
-                    TextFont {
-                        font_size: bevy::text::FontSize::Px(50.0),
-                        ..default()
-                    },
-                ));
-            });
-        } 
-    } else if !gameover.is_empty() {
-        if let Ok(entity) = gameover.single() {
-            commands.entity(entity).despawn();
-        } 
-    }
 }

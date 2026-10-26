@@ -1,11 +1,7 @@
 use bevy::{ecs::{entity::{Entity, EntityHashSet}, query::{With, Without}, system::{Commands, Query, Res, ResMut}}, math::{Vec2, Vec3}, time::Time, transform::components::Transform};
 
-use crate::{components::{AttackCooldown, Bullet, Collider, Dead, Player, Zombie, ZombieAnimation, ZombieAnimationState}, resources::{Kills}};
+use crate::{combat::{components::Bullet, config::{FAR_DISTANCE, NEAR_DISTANCE, SEPARATION_FAR, SEPARATION_NEAR}}, components::{Collider, Dead}, player::components::Player, resources::Kills, zombie::components::{AttackCooldown, Zombie, ZombieAnimation, ZombieAnimationState}};
 
-const SEPARATION_FAR: f32 = 60.0;   // 45
-pub const SEPARATION_NEAR: f32 = 5.0;   // 30
-const NEAR_DISTANCE: f32 = 70.0;
-const FAR_DISTANCE: f32 = 160.0;
 
 
 pub fn zombie_player_collision(
@@ -88,55 +84,6 @@ pub fn zombie_zombie_collision(
     }
 }
 
-// pub fn zombie_zombie_collision(
-//     mut zombies: Query<(Entity, &mut Transform, &Collider), (With<Zombie>, Without<Player>, Without<Dead>)>,
-//     player: Query<&Transform, With<Player>>
-// ) {
-//     let Ok(player_transform) = player.single() else {
-//         return;
-//     };
-
-//     let entities: Vec<Entity> = zombies
-//         .iter()
-//         .map(|(entity, _, _)| entity)
-//         .collect();
-
-
-//     for i in 0..entities.len() {
-//         for j in (i + 1)..entities.len() {
-//             let Ok([(_, mut transform_a, collider_a), (_, mut transform_b, collider_b)]) =
-//                 zombies.get_many_mut([entities[i], entities[j]])
-//             else {
-//                 continue;
-//             };
-
-//             let offset = transform_b.translation - transform_a.translation;
-//             let distance = offset.length();
-
-//             let player_distance = transform_a.translation.distance(player_transform.translation).min(transform_b.translation.distance(player_transform.translation));
-
-//             let t = ((player_distance - NEAR_DISTANCE) / (FAR_DISTANCE - NEAR_DISTANCE)).clamp(0.0, 1.0);
-
-//             let extra = SEPARATION_NEAR + (SEPARATION_FAR - SEPARATION_NEAR) * t;
-
-//             let min_allowed_distance = collider_a.radius + collider_b.radius + extra;
-
-//             if distance < min_allowed_distance {
-//                 let overlap = min_allowed_distance - distance;
-
-//                 let direction = if distance == 0.0 {
-//                     Vec3::X
-//                 } else {
-//                     offset.normalize()
-//                 };
-
-//                 transform_a.translation -= direction * overlap/ZOMBIE_SEPARATION_STRENGTH;
-//                 transform_b.translation += direction * overlap/ZOMBIE_SEPARATION_STRENGTH;
-//             }
-
-//         }
-//     }
-// }
 
 pub fn bullet_zombie_collision(
     zombies: Query<(Entity, &Transform, &Collider), (With<Zombie>, Without<Dead>)>,

@@ -1,9 +1,7 @@
-use std::{fs, io::Write, path::PathBuf};
-
 use bevy::{ecs::{entity::Entity, query::{With, Without}, system::{Commands, Query, Res, ResMut}}, input::{ButtonInput, keyboard::KeyCode}, math::Vec3, transform::components::Transform, window::{PrimaryWindow, Window}};
-use directories::ProjectDirs;
 
-use crate::{asset_resources::ZombieAnimationAssets, components::{Bullet, Dead, GameOverText, Health, Player, ShootCooldown, Zombie}, resources::{Kills, SaveData, Wave, WaveState}, zombie::spawn_wave};
+use crate::{combat::components::Bullet, components::{Dead, Health}, game::{persistence::save_highest_wave_to_disk, resources::SaveData}, player::components::{Player, ShootCooldown}, resources::{Kills, Wave, WaveState}, ui::components::GameOverText, zombie::{asset_resource::ZombieAnimationAssets, components::Zombie, spawning::spawn_wave}};
+
 
 pub fn start_selected_wave(
     mut commands: Commands,
@@ -79,14 +77,6 @@ pub fn restart_game(
     }
 }
 
-pub fn load_save_data(
-    mut save_data: ResMut<SaveData>,
-) {
-    if let Some(highest_wave) = load_highest_wave_from_disk() {
-        save_data.highest_wave = highest_wave;
-    }
-}
-
 pub fn highest_wave_reached(
     mut save_data: ResMut<SaveData>,
     wave: Res<Wave>,
@@ -102,53 +92,3 @@ pub fn highest_wave_reached(
 }
 
 
-pub fn load_highest_wave_from_disk() -> Option<u32>{  
-    if let Some(path) = save_path() {
-        if let Ok(highest_wave) = fs::read_to_string(path) {
-            if let Ok(highest_wave) = highest_wave.trim().parse::<u32>() {
-                return Some(highest_wave)
-            }    
-        } 
-    } 
-    None
-}
-
-
-pub fn save_highest_wave_to_disk(highest_wave: u32) {
-    if let Some(save_path) = save_path() {
-        if let Some(parent_dir) = save_path.parent() {
-            if let Ok(_) = std::fs::create_dir_all(parent_dir) {
-                if let Ok(mut file) = std::fs::File::create(save_path) {
-                    let data = format!("{}",highest_wave);
-                    let data_as_bytes = data.as_bytes();     
-                    
-                    match file.write_all(data_as_bytes) {
-                        Ok(_) => {},
-                        Err(e) => eprintln!("{}",e)
-                    }
-                }
-                else {
-                    eprintln!("file creation failed")
-                }
-            } else {
-                eprintln!("directory creation failed")
-            };        
-        } else {
-            eprintln!("parent directory not found");
-        };
-    } else {
-        eprintln!("save path unavailable");
-    }
-}
-
-
-pub fn save_path() -> Option<PathBuf> {
-    if let Some(dir) = ProjectDirs::from("com", "MeetPanchal", "ten_seconds_to_midnight") {
-        let data_dir = dir.data_dir();
-        let save_file = data_dir.join("save.dat");
-
-        Some(save_file)
-    } else {
-        None
-    }
-}

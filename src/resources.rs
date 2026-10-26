@@ -1,6 +1,6 @@
 use bevy::{ecs::resource::Resource, math::Vec2, time::Timer};
 
-use crate::player::MUZZLE_OFFSET;
+use crate::player::config::MUZZLE_OFFSET;
 
 #[derive(Resource)]
 pub struct Wave {
@@ -20,22 +20,6 @@ pub enum WaveState {
 pub struct Kills {
     pub kill: u32, 
 }
-
-
-#[derive(Resource)]
-pub struct SaveData {
-    pub highest_wave: u32,
-}
-
-impl Default for SaveData {
-    fn default() -> Self {
-        Self {
-            highest_wave: 0,
-        }
-    }
-}
-
-
 
 pub const AIM_RADIUS: f32 = MUZZLE_OFFSET + 20.0;       // fixed crosshair distance from player
 pub const MOUSE_SENSITIVITY: f32 = 1.0;  // tweak to taste

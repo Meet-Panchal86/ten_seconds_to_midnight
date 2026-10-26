@@ -1,8 +1,7 @@
 use bevy::{ecs::{entity::Entity, system::{Commands, Query, Res}}, time::Time, transform::components::Transform};
-use crate::components::Bullet;
 
-const BULLET_SPEED: f32 = 800.0;
-const BULLET_DESPAWN_BOUNDRY: f32 = 1000.0;
+use crate::combat::{components::Bullet, config::{BULLET_DESPAWN_BOUNDRY, BULLET_SPEED}};
+
 
 pub fn bullet_movement(time: Res<Time>, mut bullet: Query<(Entity, &mut Bullet, &mut Transform)>, mut commands: Commands) {
     let speed = BULLET_SPEED;

@@ -1,0 +1,1 @@
+pub const WAVE_INTERVAL: f32 = 4.0;

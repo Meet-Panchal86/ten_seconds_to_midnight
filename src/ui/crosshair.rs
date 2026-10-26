@@ -1,6 +1,6 @@
 use bevy::{asset::AssetServer, ecs::{entity::Entity, query::With, system::{Commands, Query, Res, ResMut, Single}}, input::{ButtonInput, keyboard::KeyCode, mouse::AccumulatedMouseMotion}, math::Vec2, sprite::Sprite, transform::components::Transform, utils::default, window::{CursorGrabMode, CursorOptions, PrimaryWindow, Window, WindowMode}};
 
-use crate::{components::{Crosshair, Player}, player::MUZZLE_SIDE, resources::{AIM_RADIUS, AimOffset, MOUSE_SENSITIVITY}};
+use crate::{player::{config::MUZZLE_SIDE, components::Player}, resources::{AIM_RADIUS, AimOffset, MOUSE_SENSITIVITY}, ui::components::Crosshair};
 
 pub fn hide_cursor(mut cursor_options: Single<&mut CursorOptions>, mut window: Query<&mut Window, With<PrimaryWindow>>) {
     if let Ok(mut window) = window.single_mut() {
@@ -52,19 +52,6 @@ pub fn spawn_crosshair(mut commands: Commands, player: Query<Entity, With<Player
     commands.entity(entity).add_child(crosshair);
 }
 
-// pub fn despawn_crosshair(
-//     mut commands: Commands,
-//     player: Query<Entity, (With<Player>, With<Dead>)>,
-//     crosshair: Query<Entity, With<Crosshair>>
-// ) {
-//     if let Ok(_) = player.single() {
-//         let Ok(entity) = crosshair.single() else {
-//             return;
-//         } ;
-//         commands.entity(entity).despawn();
-//     }
-// }
-
 pub fn update_aim_offset(
     motion: Res<AccumulatedMouseMotion>,
     mut aim: ResMut<AimOffset>,
@@ -83,13 +70,3 @@ pub fn update_aim_offset(
         aim.0 = Vec2::new(AIM_RADIUS, 0.0);
     }
 }
-
-// pub fn update_crosshair(
-//     aim: Res<AimOffset>,
-//     player: Query<&Transform, (With<Player>, Without<Crosshair>)>,
-//     mut crosshair: Query<&mut Transform, With<Crosshair>>,
-// ) {
-//     let Ok(player_tf) = player.single() else { return };
-//     let Ok(mut tf) = crosshair.single_mut() else { return };
-//     tf.translation = (player_tf.translation.truncate() + aim.0).extend(10.0);
-// }
