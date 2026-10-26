@@ -17,7 +17,7 @@ pub fn game_sound(audio_assets: Res<AudioAssets>, mut commands: Commands) {
         AudioPlayer::new(audio_assets.gamesound.clone()),
         PlaybackSettings {
             mode: PlaybackMode::Loop,
-            volume: Volume::Linear(0.14),
+            volume: Volume::Linear(0.3),
             ..default()
         }
     ));

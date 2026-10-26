@@ -8,11 +8,11 @@ bevy = { version = "0.19.1", features = ["mp3", "wav"] }
 directories = "6.0.0"
 rand = "0.10.3"
 
-# [profile.dev]
-# opt-level = 1
+[profile.dev]
+opt-level = 1
 
-# [profile.dev.package."*"]
-# opt-level = 3
+[profile.dev.package."*"]
+opt-level = 3
 
 # Disable verbose debug log calls at compile-time for extra speed
 log = { version = "*", features = ["max_level_debug", "release_max_level_warn"] }

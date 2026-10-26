@@ -1,4 +1,4 @@
-use bevy::{audio::{PlaybackMode, Volume}, ecs::{entity::Entity, query::{With, Without}, system::{Commands, Query, Res}}, input::{ButtonInput, keyboard::KeyCode, mouse::MouseButton}, math::{Quat, Vec2}, prelude::*, sprite::Sprite, time::{Time, Timer}, transform::components::Transform, utils::default, window::{PrimaryWindow, Window}};
+use bevy::{audio::{PlaybackMode}, ecs::{entity::Entity, query::{With, Without}, system::{Commands, Query, Res}}, input::{ButtonInput, keyboard::KeyCode, mouse::MouseButton}, math::{Quat, Vec2}, prelude::*, sprite::Sprite, time::{Time, Timer}, transform::components::Transform, utils::default, window::{PrimaryWindow, Window}};
 use crate::{asset_resources::{AudioAssets, PlayerAnimationAssets}, components::{AimLine, Bullet, Collider, Dead, Health, MuzzleFlash, Player, PlayerAnimation, PlayerAnimationState, ShootCooldown}, resources::AimOffset};
 
 pub const PLAYER_SPEED: f32 = 200.0;
@@ -204,7 +204,7 @@ pub fn player_shooting(
             AudioPlayer::new(audio_assets.gunshot.clone()),
             PlaybackSettings {
             mode: PlaybackMode::Despawn,
-            volume: Volume::Linear(0.85),
+           // volume: Volume::Linear(0.85),
             //  speed: 2.4,
             ..default()
             }
